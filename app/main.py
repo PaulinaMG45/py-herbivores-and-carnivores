@@ -14,12 +14,16 @@ class Animal:
         # Register every created animal
         Animal.alive.append(self)
 
-    def __repr__(self) -> str:
+    @staticmethod
+    def format_animal(animal: "Animal") -> str:
         return (
-            f"{{Name: {self.name}, "
-            f"Health: {self.health}, "
-            f"Hidden: {self.hidden}}}"
+            f"{{Name: {animal.name}, "
+            f"Health: {animal.health}, "
+            f"Hidden: {animal.hidden}}}"
         )
+
+    def __repr__(self) -> str:
+        return Animal.format_animal(self)
 
 
 class Herbivore(Animal):
