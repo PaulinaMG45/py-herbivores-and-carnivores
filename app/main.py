@@ -40,6 +40,7 @@ class Carnivore(Animal):
             if herbivore.health <= 0:
                 Animal.alive.remove(herbivore)
 
+
 # Only for manual testing
 if __name__ == "__main__":
 
