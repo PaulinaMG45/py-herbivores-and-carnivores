@@ -14,6 +14,11 @@ class Animal:
         # Register every created animal
         Animal.alive.append(self)
 
+    @classmethod
+    def reset_alive(cls) -> None:
+        """Reset the alive list - useful for testing"""
+        cls.alive.clear()
+
     @staticmethod
     def format_animal(animal: "Animal") -> str:
         return (
