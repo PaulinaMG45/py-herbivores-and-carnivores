@@ -6,7 +6,7 @@ class AliveList(list):
 
 
 class Animal:
-    alive = AliveList()
+    alive: list["Animal"] = AliveList()
 
     def __init__(
         self,
