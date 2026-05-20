@@ -31,6 +31,11 @@ class Animal:
             f"Hidden: {self.hidden}}}"
         )
 
+    @classmethod
+    def clear_alive(cls) -> None:
+        """Reset alive animals list."""
+        cls.alive.clear()
+
     def _die(self) -> None:
         if self in Animal.alive:
             Animal.alive.remove(self)
@@ -57,7 +62,7 @@ class Carnivore(Animal):
 
 # Example usage
 if __name__ == "__main__":
-    Animal.alive = AliveList()
+    Animal.clear_alive()
 
     lion = Carnivore("King Lion")
     rabbit = Herbivore("Susan", 25)
