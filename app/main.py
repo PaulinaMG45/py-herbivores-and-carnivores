@@ -1,5 +1,12 @@
+class AliveList(list):
+    """Custom list to provide a pretty string representation."""
+
+    def __repr__(self) -> str:
+        return "[" + ", ".join(repr(animal) for animal in self) + "]"
+
+
 class Animal:
-    alive: list["Animal"] = []
+    alive = AliveList()
 
     def __init__(
         self,
@@ -11,45 +18,53 @@ class Animal:
         self.health = health
         self.hidden = hidden
 
-        # Register every created animal
         Animal.alive.append(self)
 
-    @classmethod
-    def reset_alive(cls) -> None:
-        """Reset the alive list - useful for testing"""
-        cls.alive.clear()
-
-    @staticmethod
-    def format_animal(animal: "Animal") -> str:
-        return (
-            f"{{Name: {animal.name}, "
-            f"Health: {animal.health}, "
-            f"Hidden: {animal.hidden}}}"
-        )
+        if self.health <= 0:
+            self.health = 0
+            self._die()
 
     def __repr__(self) -> str:
-        return Animal.format_animal(self)
+        return (
+            f"{{Name: {self.name}, "
+            f"Health: {self.health}, "
+            f"Hidden: {self.hidden}}}"
+        )
+
+    def _die(self) -> None:
+        if self in Animal.alive:
+            Animal.alive.remove(self)
 
 
 class Herbivore(Animal):
-
     def hide(self) -> None:
         self.hidden = not self.hidden
 
 
 class Carnivore(Animal):
-
     def bite(self, herbivore: Animal) -> None:
-        if isinstance(herbivore, Herbivore) and herbivore.hidden is False:
-            herbivore.health -= 50
-            if herbivore.health <= 0:
-                Animal.alive.remove(herbivore)
+        if not isinstance(herbivore, Herbivore):
+            return
+
+        if herbivore.hidden:
+            return
+
+        herbivore.health = max(0, herbivore.health - 50)
+
+        if herbivore.health == 0:
+            herbivore._die()
 
 
-# Only for manual testing
+# Example usage
 if __name__ == "__main__":
+    Animal.alive = AliveList()
 
-    pantera = Carnivore("Bagira")
-    snake = Carnivore("Kaa")
+    lion = Carnivore("King Lion")
+    rabbit = Herbivore("Susan", 25)
 
+    print(Animal.alive)
+
+    lion.bite(rabbit)
+
+    print(rabbit.health)  # 0
     print(Animal.alive)
